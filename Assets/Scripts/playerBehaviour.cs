@@ -15,9 +15,12 @@ public class playerBehaviour : MonoBehaviour {
 	public LayerMask whatIsGround;
 	public float jumpForce = 700f;
 
+	Animator anim;
+
 	void Start () 
 	{
 		rb = GetComponent<Rigidbody2D>();
+		anim = GetComponent<Animator> ();
 	}
 
 
@@ -27,8 +30,10 @@ public class playerBehaviour : MonoBehaviour {
 
 		move = Input.GetAxis ("Horizontal");
 
+		anim.SetFloat ("Speed", Mathf.Abs(move));
+
 		rb.velocity = new Vector2 (move * maxSpeed, rb.velocity.y);
-	
+
 		if (move > 0 && !facingRight)
 			Flip ();
 		else if (move < 0 && facingRight)
@@ -42,6 +47,8 @@ public class playerBehaviour : MonoBehaviour {
 			grounded = false;
 			rb.AddForce (new Vector2 (0, jumpForce));
 		}
+
+		if (Input.GetButtonDown("Fire1"))	rb.isKinematic = !rb.isKinematic;
 	}
 
 

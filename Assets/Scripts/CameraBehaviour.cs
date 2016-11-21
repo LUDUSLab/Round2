@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class Movement : MonoBehaviour {
+public class CameraBehaviour : MonoBehaviour {
     public GameObject player;
     public float min;
     public float max;
