@@ -11,6 +11,8 @@ public class playerBehaviour : MonoBehaviour {
 
 	bool grounded = false;
 	bool bittingFloor = false;
+
+	public float bittingJumpForce = 700f;
 	public Transform groundCheck;
 	public Transform bittingCheck;
 	float groundRadius = 0.1f;
@@ -45,12 +47,19 @@ public class playerBehaviour : MonoBehaviour {
 
 	void Update()
 	{
-		if ((bittingFloor || grounded) && Input.GetButtonDown ("Jump")) 
+		if ( grounded && Input.GetButtonDown ("Jump")) 
 		{
 			grounded = false;
 			bittingFloor = false;
 
 			rb.AddForce (new Vector2 (0, jumpForce));
+		}
+
+		if (bittingFloor && Input.GetButtonDown ("Jump")) 
+		{
+			bittingFloor = false;
+
+			rb.AddForce (new Vector2 (0, bittingJumpForce));
 		}
 
 		if (Input.GetButtonDown("Fire1"))	rb.isKinematic = !rb.isKinematic;
