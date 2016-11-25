@@ -10,7 +10,9 @@ public class playerBehaviour : MonoBehaviour {
 	float move;
 
 	bool grounded = false;
+	bool bittingFloor = false;
 	public Transform groundCheck;
+	public Transform bittingCheck;
 	float groundRadius = 0.1f;
 	public LayerMask whatIsGround;
 	public float jumpForce = 700f;
@@ -27,6 +29,7 @@ public class playerBehaviour : MonoBehaviour {
 	void FixedUpdate () 
 	{
 		grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+		bittingFloor = Physics2D.OverlapCircle(bittingCheck.position, 0.1f, whatIsGround);
 
 		move = Input.GetAxis ("Horizontal");
 
@@ -42,9 +45,11 @@ public class playerBehaviour : MonoBehaviour {
 
 	void Update()
 	{
-		if (grounded && Input.GetButtonDown ("Jump")) 
+		if ((bittingFloor || grounded) && Input.GetButtonDown ("Jump")) 
 		{
 			grounded = false;
+			bittingFloor = false;
+
 			rb.AddForce (new Vector2 (0, jumpForce));
 		}
 
