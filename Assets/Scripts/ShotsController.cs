@@ -2,56 +2,40 @@
 using System.Collections;
 using System.Collections.Generic;
 
-public class ShotsController : MonoBehaviour {
+public class ShotsController : MonoBehaviour
+{
 
-	public float spawnRate;
-	private float currentSpawnRate;
+    public float spawnRateMax;
+    public float spawnRateMin;
+    float spawnRate;
 
-	public int maxShots;
-	public GameObject shot;
+    public GameObject shot;
 
-	public List<GameObject> shots;
+    public Transform aim;
 
-	public Transform aim;
+    private bool visivel = false;
 
-	//public AudioSource shootAudio;
+    void Start()
+    {
+        visivel = false;
 
-	void Start () {
+        spawnRate = Random.Range(spawnRateMin, spawnRateMax);
 
-		for (int i = 0; i < maxShots; i++) {
-			GameObject aux = Instantiate (shot);
-			shots.Add (aux);
-			aux.SetActive (false);
-		}
+        InvokeRepeating("Shoot", 0, spawnRate);
+    }
 
-		currentSpawnRate = spawnRate;
-	}
+    public void OnBecameVisible()
+    {
+        visivel = true;
+    }
 
+    public void OnBecameInvisible()
+    {
+        visivel = false;
+    }
 
-	void Update () {
-
-		currentSpawnRate += Time.deltaTime;
-		if(currentSpawnRate> spawnRate)
-		{
-			currentSpawnRate = 0;
-			GameObject aux = null;
-
-			for (int i = 0; i < maxShots; i++) 
-			{
-				if (shots [i].activeSelf == false) 
-				{
-					aux = shots [i];
-					break;
-				}
-			}
-
-			if (aux != null) 
-			{
-				aux.transform.position = aim.position;
-				aux.SetActive (true);
-	//		shootAudio.Play ();
-			}
-
-		}
-	}
+    void Shoot()
+    {
+        if (visivel)    Instantiate(shot, aim.position,Quaternion.identity); 
+    }
 }
