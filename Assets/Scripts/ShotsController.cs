@@ -13,7 +13,6 @@ public class ShotsController : MonoBehaviour {
 	public List<GameObject> shots;
 
 	public Transform aim;
-	public Transform player;
 
 	//public AudioSource shootAudio;
 

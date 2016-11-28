@@ -38,11 +38,18 @@ public class ShotBehaviourVertical : MonoBehaviour {
 
 	}
 
+
+
 	void OnCollisionEnter2D(Collision2D coll) {
 
 		if (coll.gameObject.tag != "Shot")
 			gameObject.SetActive (false);
-		if (coll.gameObject.tag == "Shot")
-			flipped = !flipped;
+		if (coll.gameObject.tag == "Shot") 
+		{
+			if (!flipped)
+				rb.transform.position += new Vector3 (0f, speed*Time.deltaTime, 0f);
+			else
+				rb.transform.position -= new Vector3 (0f, speed*Time.deltaTime, 0f);
+		}
 	}
 }

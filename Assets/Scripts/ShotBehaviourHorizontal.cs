@@ -36,12 +36,21 @@ public class ShotBehaviourHorizontal : MonoBehaviour {
 			rb.velocity = new Vector2 (-speed, 0f);
 	}
 
+	void OnBecameInvisible () {
+		
+		gameObject.SetActive(false);
+	}
+
 	void OnCollisionEnter2D(Collision2D coll) {
 
 		if (coll.gameObject.tag != "Shot")
 			gameObject.SetActive (false);
-		if (coll.gameObject.tag == "Shot")
-			flipped = !flipped;
-
+		if (coll.gameObject.tag == "Shot") 
+		{
+			if (flipped)
+				rb.transform.position += new Vector3 (speed*Time.deltaTime, 0f, 0f);
+			else
+				rb.transform.position -= new Vector3 (speed*Time.deltaTime, 0f, 0f);
+		}
 	}
 }
