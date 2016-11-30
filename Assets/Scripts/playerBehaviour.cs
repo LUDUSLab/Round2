@@ -1,11 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.SceneManagement;
 using System.Collections;
+using UnityEngine.UI;
 
 public class playerBehaviour : MonoBehaviour {
 
 	public float maxSpeed = 10f;
 
+    CircleCollider2D coli;
 	Rigidbody2D rb;
 	bool facingRight = true;
 	float move;
@@ -22,8 +24,13 @@ public class playerBehaviour : MonoBehaviour {
 
     int hp;
     bool died;
+    int scientistCounter = 0;
 
-	Animator anim;
+    public Image sprite;
+    public Text x;
+    public Text scientistCont;
+
+    Animator anim;
 
     public GameController gc;
 
@@ -35,11 +42,18 @@ public class playerBehaviour : MonoBehaviour {
 
         gc = (GameController) FindObjectOfType(typeof(GameController));
 
-        if (gc.getDificulty()) hp = 1;
+        if (gc.getDificulty())
+        {
+            hp = 1;
+            Destroy(scientistCont);
+            Destroy(x);
+            Destroy(sprite);
+        }
         else hp = 3;
 
         rb = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator> ();
+        coli = GetComponent<CircleCollider2D>();
 
         died = false;
 	}
@@ -109,7 +123,8 @@ public class playerBehaviour : MonoBehaviour {
     {
         endOfLine.SetActive(true);
         died = true;
-        
+        anim.SetBool("Death", died);
+        coli.radius = 0.1755833f;
     }
 
     void OnCollisionEnter2D(Collision2D coll)
@@ -120,6 +135,23 @@ public class playerBehaviour : MonoBehaviour {
             hp--;
         }
         else if (coll.gameObject.tag == "Shot" && hp != 1) hp--;
+
+        if(coll.gameObject.tag == "Scientist")
+        {
+            Destroy(coll.gameObject);
+            if(scientistCounter < 3 && !gc.getDificulty())
+            {
+                scientistCounter++;
+                scientistCont.text = scientistCounter.ToString();
+            }
+            else if(scientistCounter == 3)
+            {
+                hp++;
+                scientistCounter = 0;
+                scientistCont.text = "0";
+                if (hp > 3) hp = 3;
+            }
+        }
     }
 
     void OnBecameInvisible()

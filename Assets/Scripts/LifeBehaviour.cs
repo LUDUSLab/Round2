@@ -4,14 +4,13 @@ using System.Collections;
 
 public class LifeBehaviour : MonoBehaviour {
 
-    playerBehaviour player;
+    public playerBehaviour player;
     int hp;
 
     public int nHeart;
 
     void Start ()
     {
-        player = (playerBehaviour)FindObjectOfType(typeof(playerBehaviour));
         
     }
 
@@ -19,7 +18,17 @@ public class LifeBehaviour : MonoBehaviour {
 	void Update ()
     {
         hp = player.getHp();
-        if (hp < nHeart) gameObject.SetActive(false);
-        else gameObject.SetActive(true);
+        if (hp >= nHeart)
+        {
+            Vector3 theScale = transform.localScale;
+            theScale.x = 1;
+            transform.localScale = theScale;
+        }
+        if (hp < nHeart)
+        {
+            Vector3 theScale = transform.localScale;
+            theScale.x = 0;
+            transform.localScale = theScale;
+        }
 	}
 }
