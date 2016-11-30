@@ -13,13 +13,13 @@ public class MenuBehaviourScript : MonoBehaviour
 
     void Start()
     {
-
+        anim = GetComponent<Animator>();
     }
 
  	void Update()
  	{
  		escolha = Input.GetAxis ("Horizontal");
- 		//anim.SetBool ("Ligado", hard);
+ 		anim.SetBool ("Ligado", hard);
  		if (centro && escolha > 0) {
  			centro = false;
  			hard = true;
