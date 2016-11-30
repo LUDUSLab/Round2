@@ -20,11 +20,20 @@ public class playerBehaviour : MonoBehaviour {
 	public LayerMask whatIsGround;
 	public float jumpForce = 700f;
 
+    int hp;
+
 	Animator anim;
+
+    public GameController gc;
 
 	void Start () 
 	{
-		rb = GetComponent<Rigidbody2D>();
+        gc = (GameController) FindObjectOfType(typeof(GameController));
+
+        if (gc.getDificulty()) hp = 1;
+        else hp = 3;
+
+        rb = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator> ();
 	}
 
@@ -82,8 +91,7 @@ public class playerBehaviour : MonoBehaviour {
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.tag == "Shot")
-            Die();
-
+        if (coll.gameObject.tag == "Shot" && hp == 1) Die();
+        else if (coll.gameObject.tag == "Shot" && hp != 1) hp--;
     }
 }
