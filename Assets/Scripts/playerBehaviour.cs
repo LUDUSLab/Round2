@@ -21,13 +21,18 @@ public class playerBehaviour : MonoBehaviour {
 	public float jumpForce = 700f;
 
     int hp;
+    bool died;
 
 	Animator anim;
 
     public GameController gc;
 
+    public GameObject endOfLine;
+
 	void Start () 
 	{
+        endOfLine.SetActive(false);
+
         gc = (GameController) FindObjectOfType(typeof(GameController));
 
         if (gc.getDificulty()) hp = 1;
@@ -35,24 +40,33 @@ public class playerBehaviour : MonoBehaviour {
 
         rb = GetComponent<Rigidbody2D>();
 		anim = GetComponent<Animator> ();
+
+        died = false;
 	}
 
 
 	void FixedUpdate () 
 	{
-		grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
-		bittingFloor = Physics2D.OverlapCircle(bittingCheck.position, 0.1f, whatIsGround);
+        if (!died)
+        {
+            grounded = Physics2D.OverlapCircle(groundCheck.position, groundRadius, whatIsGround);
+            bittingFloor = Physics2D.OverlapCircle(bittingCheck.position, 0.1f, whatIsGround);
 
-		move = Input.GetAxis ("Horizontal");
+            if (grounded || bittingFloor) anim.SetBool("OnGround", true);
+            else anim.SetBool("OnGround", false);
 
-		anim.SetFloat ("Speed", Mathf.Abs(move));
+            move = Input.GetAxis("Horizontal");
 
-		rb.velocity = new Vector2 (move * maxSpeed, rb.velocity.y);
+            if (!bittingFloor) anim.SetFloat("Speed", Mathf.Abs(move));
+            else anim.SetFloat("Speed", 0);
 
-		if (move > 0 && !facingRight)
-			Flip ();
-		else if (move < 0 && facingRight)
-			Flip ();
+            rb.velocity = new Vector2(move * maxSpeed, rb.velocity.y);
+
+            if (move > 0 && !facingRight)
+                Flip();
+            else if (move < 0 && facingRight)
+                Flip();
+        }
 	}
 
 	void Update()
@@ -72,8 +86,15 @@ public class playerBehaviour : MonoBehaviour {
 			rb.AddForce (new Vector2 (0, bittingJumpForce));
 		}
 
-		if (Input.GetButtonDown("Fire1"))	rb.isKinematic = !rb.isKinematic;
-	}
+		//if (Input.GetButtonDown("Fire1"))	rb.isKinematic = !rb.isKinematic;
+
+        if ((Input.GetKey(KeyCode.KeypadEnter) || Input.GetButtonDown("Submit")) && died)
+        {
+            SceneManager.UnloadScene(SceneManager.GetActiveScene().buildIndex);
+            SceneManager.LoadScene("HUD");
+        }
+
+    }
 
 
 	void Flip()
@@ -86,12 +107,29 @@ public class playerBehaviour : MonoBehaviour {
 
     void Die()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        endOfLine.SetActive(true);
+        died = true;
+        
     }
 
     void OnCollisionEnter2D(Collision2D coll)
     {
-        if (coll.gameObject.tag == "Shot" && hp == 1) Die();
+        if (coll.gameObject.tag == "Shot" && hp == 1)
+        {
+            Die();
+            hp--;
+        }
         else if (coll.gameObject.tag == "Shot" && hp != 1) hp--;
+    }
+
+    void OnBecameInvisible()
+    {
+        hp = 0;
+        Die();
+    }
+
+    public int getHp()
+    {
+        return hp;
     }
 }

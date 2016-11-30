@@ -15,6 +15,9 @@ public class ShotsController : MonoBehaviour
 
     private bool visivel = false;
 
+    Transform tr;
+    float rotation;
+
     void Start()
     {
         visivel = false;
@@ -22,6 +25,10 @@ public class ShotsController : MonoBehaviour
         spawnRate = Random.Range(spawnRateMin, spawnRateMax);
 
         InvokeRepeating("Shoot", 0, spawnRate);
+
+        tr = GetComponent<Transform>();
+        rotation = tr.rotation.z;
+
     }
 
     public void OnBecameVisible()
@@ -36,6 +43,7 @@ public class ShotsController : MonoBehaviour
 
     void Shoot()
     {
-        if (visivel)    Instantiate(shot, aim.position,Quaternion.identity); 
+        if (visivel && rotation == 0)    Instantiate(shot, aim.position,Quaternion.identity);
+        else if(visivel)    Instantiate(shot, aim.position, Quaternion.Euler(0, 0, 90)); 
     }
 }

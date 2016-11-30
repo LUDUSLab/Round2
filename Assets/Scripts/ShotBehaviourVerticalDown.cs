@@ -9,7 +9,7 @@ public class ShotBehaviourVerticalDown : MonoBehaviour
     private bool flipped = false;
 
     Rigidbody2D rb;
-
+   
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();

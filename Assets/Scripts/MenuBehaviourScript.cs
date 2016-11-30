@@ -4,61 +4,40 @@ using System.Collections;
  
 public class MenuBehaviourScript : MonoBehaviour
 {
-    Animator anim;
- 	float escolha;
- 	private bool dificil;
- 	private bool centro = true;
- 	private bool hard = false;
- 	private bool easy = false;
-    int delay = 0;
+    public FacilBehaviour facil;
+    public InsanoBehaviour insano;
 
+ 	float escolha;
+ 	private bool dificil = false;
     GameController gc;
 
     void Start()
     {
-        gc = (GameController)FindObjectOfType(typeof(GameController));
-        anim = GetComponent<Animator>();
+        gc = (GameController)FindObjectOfType(typeof(GameController));   
     }
 
  	void Update()
  	{
+        facil.anim.SetBool("FacilSelected", dificil);
+        insano.anim.SetBool("InsaneSelected", dificil);
 
-        if (Input.GetKey(KeyCode.KeypadEnter) || Input.GetKey("enter"))
+        escolha = Input.GetAxis ("Horizontal");
+
+
+        if (escolha > 0 && !dificil)
         {
-            gc.setDificulty(true);
+            dificil = true;
+        }
+        if (escolha < 0 && dificil)
+        {
+            dificil = false;
+        }
+
+        if (Input.GetKey(KeyCode.KeypadEnter) || Input.GetButtonDown("Submit"))
+        {
+            gc.setDificulty(dificil);
             SceneManager.UnloadScene(SceneManager.GetActiveScene().buildIndex);
             SceneManager.LoadScene("Stage1");
         }
-            /*
- 		escolha = Input.GetAxis ("Horizontal");
- 		anim.SetBool ("Ligado", hard);
- 		if (centro && escolha > 0) {
- 			centro = false;
- 			hard = true;
- 		}
- 		if (centro && escolha< 0) {
- 			centro = false;
- 			easy = true;
- 		}
- 		if (hard && escolha< 0) {
- 			hard = false;
- 			easy = true;
- 		}
- 		if (easy && escolha > 0) {
- 			easy = false;
- 			hard = true;
- 		}
- 		if (easy) {
- 			if (Input.GetKey (KeyCode.KeypadEnter) || Input.GetKey ("enter")) {
- 				dificil = false;
-                SceneManager.LoadScene("Stage1");
-            }
- 		}
- 		if (hard) {
- 			if (Input.GetKey (KeyCode.KeypadEnter) || Input.GetKey ("enter")) {
- 				dificil = true;
- 				SceneManager.LoadScene ("Stage1");
- 			}
- 		}*/
     }
- }
+}
