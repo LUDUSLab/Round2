@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.08.00">
+    <object class="AudioFile" id="{cafdbe71-f472-4638-a2ab-0bd50e55b621}">
+        <property name="assetPath">
+            <value>Playtest Dinopixel.mp3</value>
+        </property>
+        <property name="isStreaming">
+            <value>true</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>28.212244897959184</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{7e1eaa12-bcec-40d4-b4b2-54d5cc2e4345}</destination>
+        </relationship>
+    </object>
+</objects>
