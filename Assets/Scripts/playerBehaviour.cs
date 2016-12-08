@@ -18,7 +18,7 @@ public class playerBehaviour : MonoBehaviour {
 	public float bittingJumpForce = 700f;
 	public Transform groundCheck;
 	public Transform bittingCheck;
-	float groundRadius = 0.1f;
+	public float groundRadius = 0.8f;
 	public LayerMask whatIsGround;
 	public float jumpForce = 700f;
 
@@ -87,13 +87,15 @@ public class playerBehaviour : MonoBehaviour {
 	{
 		if ( grounded && Input.GetButtonDown ("Jump")) 
 		{
+            rb.velocity = new Vector2(rb.velocity.x, 0);
+
 			grounded = false;
-			bittingFloor = false;
+            bittingFloor = false;
 
 			rb.AddForce (new Vector2 (0, jumpForce));
 		}
 
-		if (bittingFloor && Input.GetButtonDown ("Jump")) 
+		if (bittingFloor && Input.GetButtonDown ("Jump") && !grounded) 
 		{
 			bittingFloor = false;
 
